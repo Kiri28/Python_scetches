@@ -33,26 +33,28 @@ import urllib.request
         self.starter_list = starter_list
         Currence_dict = self.currency_finder(self)
         self.Currence_dict = Currence_dict
-        
+
         # Manual words list
         badlist = ['поднял', 'упал', "вырос", "повысил", "понизил", 
                    "снизился", "уронил", "опустил", "поднялся", "превысил", "опустился"]
 
-        scn=0
-        while scn<7:
-            #первая попытка
-            marker=0
-            sentense=[]
+        scn = 0
+        while scn < 7:
+            # first attempt
+            marker = 0
+            sentense = []
             sentense.append(self.random_choice_starter(self))
             for i in range(10):
 
-                #Сделаем так, чтобы не давать программе начинать новые предложения в старых
-                cac=0
-                if sentense[-1]!='':
-                    rand_word=self.random_choice_word(sentense[-1])
-                    #пока слова из нашего списка встречаются более 1 раза
+                # Let's make the prohibition for program to creating new sentences in old ones
+                cac = 0
+                if sentense[-1] != '':
+                    rand_word = self.random_choice_word(sentense[-1])
+                    # While words from our list occur more then one time
                     # пока появляются только слова из списка слов- начал предложения    
-                    while (rand_word in self.news_starter(self)) or (len(set(sentense+[rand_word]))-len(set(sentense+[rand_word])-set(badlist))>=2):
+                    while (rand_word in self.news_starter(self)) or 
+                    (len(set(sentense + [rand_word])) - 
+                     len(set(sentense + [rand_word]) - set(badlist)) >= 2):
                         rand_word=self.random_choice_word(sentense[-1])
                         cac+=1
                         #если нам кажется что других вариантов не придумать
