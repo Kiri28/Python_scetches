@@ -133,113 +133,117 @@ import urllib.request
                 break
 
     @classmethod
-    def random_choice_word(self,word):
-        # создадим словарь слов, которые кажутся очень странными в своём поведении и будем делать для них отедельное решение
-        strange_list={'до':0,'с':0,'в':0,'к':0,'о':0}
-        strange_list['до']={'нового':5,'старого':3,'полугодового': 3,'двухлетнего': 2,'максимума': 2,'73': 2,'трехмесячного': 2,'50': 1,'30':5}
-        strange_list['с']={'нового':5,'финансов':3,'полугодового': 3,'двухлетнего': 2,'2008': 2,'73': 2,'длинных': 2,'трехмесячного': 2,'50': 1,'30':5}
-        strange_list['в']={'докризисный':4,'отставку':3,'свой': 3,'помощь': 3,'рекордный': 2,'4': 2,'адекватный': 2,'50': 1,'44':3}
-        strange_list['к']={'доллару':4,'евро':3,'рублю': 2,'отметке': 2,'71': 1,'50': 1,'44':2}
-        strange_list['о']={'евро':3,'ещё': 3,'50': 1,'почти':2,'более': 1,'введении': 1}
-        sch=0
-        #если слово из нормального списка то всё ок
+    def random_choice_word(self, word):
+        # Let's create a strange-words list
+        strange_list = {'до':0, 'с':0, 'в':0, 'к':0, 'о':0}
+        strange_list['до'] = {'нового': 5, 'старого': 3, 'полугодового': 3, 'двухлетнего': 2, 
+                              'максимума': 2, '73': 2, 'трехмесячного': 2, '50': 1, '30': 5}
+        strange_list['с'] = {'нового': 5, 'финансов': 3, 'полугодового': 3, 'двухлетнего': 2, 
+                             '2008': 2, '73': 2, 'длинных': 2, 'трехмесячного': 2, '50': 1, '30': 5}
+        strange_list['в'] = {'докризисный': 4,'отставку': 3, 'свой': 3, 'помощь': 3, 
+                             'рекордный': 2, '4': 2, 'адекватный': 2, '50': 1, '44':3}
+        strange_list['к'] = {'доллару': 4, 'евро': 3, 'рублю': 2, 'отметке': 2, '71': 1, 
+                             '50': 1, '44': 2}
+        strange_list['о'] = {'евро': 3, 'ещё': 3, '50': 1, 'почти': 2, 'более': 1, 'введении': 1}
+        sch = 0
+        # If our word from normal list, that's all is OK
         if word not in strange_list:
-            decision_mass=dict(Counter(self.sm(self,word)).most_common(10))
+            decision_mass = dict(Counter(self.sm(self, word)).most_common(10))
         else:
-        #если оно относится к списку странных слов, то для неё строим отдельно
-            decision_mass=strange_list[word]
+        # In other case...
+            decision_mass = strange_list[word]
 
-        # если словарь не пустой, то всё ок, иначе выдаём "-1"
-        if len(decision_mass)!=0:
+        # If list not empty, thats OK, else return "-1"
+        if len(decision_mass) != 0:
             for sl in decision_mass:
-                sch+=decision_mass[sl]
-                decision_mass[sl]=sch
+                sch += decision_mass[sl]
+                decision_mass[sl] = sch
 
-            rand_choice=rand.randint(0,sch)
+            rand_choice = rand.randint(0,sch)
             for slov in decision_mass:
-                if rand_choice<=decision_mass[slov]:
+                if rand_choice <= decision_mass[slov]:
                     return(slov)
                     break
         else:
             return '-1'
         
         
-    #функция для преобразования окончаний
+    # Tails decomposition function
     @staticmethod
     def default_dict(numb):
-        if int(numb)==1:
+        if int(numb) == 1:
             return 'рубль'
-        elif int(numb)<=4 and int(numb)!=0:
+        elif int(numb) <= 4 and int(numb) != 0:
             return 'рубля'
-        elif int(numb)<10 or int(numb)==0:
+        elif int(numb) < 10 or int(numb) == 0:
             return 'рублей'
 
-    #преобразуем предложение, вставляя нужные цифры
+    # Let's transform our sentence
     @staticmethod
-    def sent_decomposition(self,sent):
-        Currence_dict=self.Currence_dict
-        rules_dict={'1':{' к ':'рублю','ниже':'рубля','выше':'рубля',' до ':'рубля'}}
-        sent_new=sent
-        #дадим пока возможность появляться предложениям без цифр
-        if len(re.findall('(\d+)',sent))!=0:
-            # не надо преобразовывать года
-            if float(re.findall('(\d+)',sent)[0])<2000:
-                inserter=''
-                if sent.find('доллар')!=-1:
-                    inserter=str(Currence_dict['USD'])
-                elif sent.find('евро')!=-1:
-                    inserter=str(Currence_dict['EUR'])
+    def sent_decomposition(self, sent):
+        Currence_dict = self.Currence_dict
+        rules_dict = {'1': {' к ': 'рублю', 'ниже':'рубля', 'выше': 'рубля', ' до ': 'рубля'}}
+        sent_new = sent
+        # Lets take a chance for non-numeric sentences
+        if len(re.findall('(\d+)',sent)) != 0:
+            # not for years
+            if float(re.findall('(\d+)', sent)[0]) < 2000:
+                inserter = ''
+                if sent.find('доллар') != -1:
+                    inserter = str(Currence_dict['USD'])
+                elif sent.find('евро') != -1:
+                    inserter = str(Currence_dict['EUR'])
 
-                if len(re.findall('(\d+)',sent))==0:
+                if len(re.findall('(\d+)', sent)) == 0:
                     print('333')
-                sent=sent.replace(re.findall('(\d+)',sent)[0],inserter)
-                if len(inserter)!=0:
-                    lastr=inserter[-1]
+                sent = sent.replace(re.findall('(\d+)', sent)[0], inserter)
+                if len(inserter) != 0:
+                    lastr = inserter[-1]
                 else:
-                    lastr='1'
+                    lastr = '1'
 
                 znak=False
                 sent_new=sent
 
-                start=sent_new.find('рубл')
-                if start==-1:
-                    start=sent_new.find('копе')
-                if start==-1:
+                start = sent_new.find('рубл')
+                if start == -1:
+                    start = sent_new.find('копе')
+                if start == -1:
                     return '-1'
 
-                finish=sent_new[start:].find(' ')
-                if finish==-1:
-                    finish=len(sent_new)
+                finish = sent_new[start:].find(' ')
+                if finish == -1:
+                    finish = len(sent_new)
 
                 if lastr in rules_dict:
                     for predl in list(rules_dict[lastr].keys()):
-                        if predl in sent_new and znak==False:
-                            #print('wow',' ',sent_new,' ',predl)
-                            sent_new=sent.replace(sent_new[start:start+finish],rules_dict[lastr][predl])
-                            znak=True
+                        if predl in sent_new and znak == False:
+                            # print('wow',' ',sent_new,' ',predl)
+                            sent_new = sent.replace(sent_new[start:start + finish], rules_dict[lastr][predl])
+                            znak = True
 
-                    if znak==False:
-                        #print('yet')
-                        sent_new=sent_new.replace(sent_new[start:start+finish],self.default_dict(lastr))
+                    if znak == False:
+                        # print('yet')
+                        sent_new = sent_new.replace(sent_new[start:start + finish], self.default_dict(lastr))
 
 
                 else:
-                    sent_new=sent_new.replace(sent_new[start:start+finish],self.default_dict(lastr))
+                    sent_new = sent_new.replace(sent_new[start:start + finish], self.default_dict(lastr))
 
         return sent_new
-    
-    
-    #функция для вывода курсов валют
+
+
+    # Returning func.
     @staticmethod
-    def currency_finder(self,value='<Value>',currence='<CharCode>'):
-        dat=self.l
-        tag=0
-        mass={}
-        keyw_closer_curr='</'+currence[1:]
-        keyw_closer_val='</'+value[1:]
+    def currency_finder(self, value = '<Value>', currence = '<CharCode>'):
+        dat = self.l
+        tag = 0
+        mass = {}
+        keyw_closer_curr = '</' + currence[1:]
+        keyw_closer_val = '</' + value[1:]
         while keyw_closer_curr in dat:
-            curr=str(dat[dat.find(currence)+len(currence):dat.find(keyw_closer_curr)])
-            vall=float(str(dat[dat.find(value)+len(value):dat.find(keyw_closer_val)])[:5].replace(',','.'))
-            mass[curr]=vall
-            dat=dat[dat.find(keyw_closer_val)+len(keyw_closer_val):]
+            curr = str(dat[dat.find(currence) + len(currence):dat.find(keyw_closer_curr)])
+            vall = float(str(dat[dat.find(value) + len(value):dat.find(keyw_closer_val)])[:5].replace(',', '.'))
+            mass[curr] = vall
+            dat = dat[dat.find(keyw_closer_val) + len(keyw_closer_val):]
         return mass
