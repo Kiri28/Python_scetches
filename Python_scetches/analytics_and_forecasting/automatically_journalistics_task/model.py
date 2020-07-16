@@ -77,37 +77,38 @@ import urllib.request
 # ____next_section__________________________________
 
 
-    # беру каждое слово и делаю для него список слов, которые шли после
-    # для этого читаю всю data, и если нахожу искомое слово, смотрю что шло после него
-    # но при этом, если в конце этого слова стоит точка, то я ничего не добавляю
+    # Take ever word and building a wordslist which can staying after them
+    # Reading all data for this, and if finding my word, checking which word was after them
+    # But, if we have dot after sentence, we are stopping
 
     @staticmethod
     def sm(self, trigger):
 
         result = []
-        words_list=self.data.replace('\xa0',' ').split(' ')
-        trig=False
+        words_list = self.data.replace('\xa0', ' ').split(' ')
+        trig = False
         for word in words_list:
-            if trig==True:
+            if trig == True:
                 result.append(word)
-                trig=False
+                trig = False
                 continue
 
-            if trigger in word and word[-1]!='.': #тоесть если мы нашли слово триггер и оно не последнее в новости
-                trig=True
+            # We can find the trigger-word and it now in the end of news
+            if trigger in word and word[-1] != '.':
+                trig = True
                 continue
 
         return result
 
 
-    # Теперь будем находить слово с большой буквы и пытаться начать предложение с него
+    # Now let's try to find wrods with capital letter
     @staticmethod
     def news_starter(self):
-        words=self.data.replace('\xa0',' ').split(' ')
-        return list(filter(lambda wow: str.isupper((wow+'n')[0]),words))
-    # Только пока сделаем это просто по первому списку слов
-    
-    
+        words = self.data.replace('\xa0', ' ').split(' ')
+        return list(filter(lambda wow: str.isupper((wow + 'n')[0]), words))
+    # But doing this by first-words-list
+
+
     # Сделаем функцию которая генерит массив, и каждому числу выбаёт число
     # при случайном выборе мы будем руководствоваться этим числом
     #Функция которая случайно выбирает слово для старта
