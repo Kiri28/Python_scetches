@@ -109,19 +109,22 @@ import urllib.request
     # But doing this by first-words-list
 
 
-    # Сделаем функцию которая генерит массив, и каждому числу выбаёт число
-    # при случайном выборе мы будем руководствоваться этим числом
-    #Функция которая случайно выбирает слово для старта
+    # Create massiv generation function
+    # We can make our choice with random-choice function
+    # Random choice-function for starting
+
     @staticmethod
     def random_choice_starter(self):
-        sch=0
-        decision_mass=Counter(self.starter_list) # тут мы упорядочиваем массив встречаемости
-        for sl in decision_mass:         # чтобы можно было выбрать случайно число
-            sch+=decision_mass[sl]
-            decision_mass[sl]=sch
+        sch = 0
+        # ordering the occurrence array
+        decision_mass = Counter(self.starter_list)
+        for sl in decision_mass:
+            sch += decision_mass[sl]
+            decision_mass[sl] = sch
 
-        sch+=150
-        decision_mass['курс']=sch # мы захотели добавить слово "курс"
+        sch += 150
+        # If we want to add the "курс" word...
+        decision_mass['курс'] = sch
 
         rand_choice=rand.randint(0,sch)
         for slov in decision_mass:
