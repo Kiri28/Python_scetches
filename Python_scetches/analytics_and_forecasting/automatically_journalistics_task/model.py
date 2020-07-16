@@ -136,15 +136,23 @@ import urllib.request
     def random_choice_word(self, word):
         # Let's create a strange-words list
         strange_list = {'до':0, 'с':0, 'в':0, 'к':0, 'о':0}
-        strange_list['до'] = {'нового': 5, 'старого': 3, 'полугодового': 3, 'двухлетнего': 2, 
-                              'максимума': 2, '73': 2, 'трехмесячного': 2, '50': 1, '30': 5}
-        strange_list['с'] = {'нового': 5, 'финансов': 3, 'полугодового': 3, 'двухлетнего': 2, 
-                             '2008': 2, '73': 2, 'длинных': 2, 'трехмесячного': 2, '50': 1, '30': 5}
-        strange_list['в'] = {'докризисный': 4,'отставку': 3, 'свой': 3, 'помощь': 3, 
-                             'рекордный': 2, '4': 2, 'адекватный': 2, '50': 1, '44':3}
-        strange_list['к'] = {'доллару': 4, 'евро': 3, 'рублю': 2, 'отметке': 2, '71': 1, 
+        strange_list['до'] = {'нового': 5, 'старого': 3, 
+                              'полугодового': 3, 'двухлетнего': 2, 
+                              'максимума': 2, '73': 2, 'трехмесячного': 2, 
+                              '50': 1, '30': 5}
+        strange_list['с'] = {'нового': 5, 'финансов': 3, 
+                             'полугодового': 3, 'двухлетнего': 2, 
+                             '2008': 2, '73': 2, 'длинных': 2, 
+                             'трехмесячного': 2, '50': 1, '30': 5}
+        strange_list['в'] = {'докризисный': 4,'отставку': 3, 
+                             'свой': 3, 'помощь': 3, 
+                             'рекордный': 2, '4': 2, 'адекватный': 2, 
+                             '50': 1, '44':3}
+        strange_list['к'] = {'доллару': 4, 'евро': 3, 'рублю': 2, 
+                             'отметке': 2, '71': 1, 
                              '50': 1, '44': 2}
-        strange_list['о'] = {'евро': 3, 'ещё': 3, '50': 1, 'почти': 2, 'более': 1, 'введении': 1}
+        strange_list['о'] = {'евро': 3, 'ещё': 3, '50': 1, 'почти': 2, 
+                             'более': 1, 'введении': 1}
         sch = 0
         # If our word from normal list, that's all is OK
         if word not in strange_list:
@@ -182,7 +190,8 @@ import urllib.request
     @staticmethod
     def sent_decomposition(self, sent):
         Currence_dict = self.Currence_dict
-        rules_dict = {'1': {' к ': 'рублю', 'ниже':'рубля', 'выше': 'рубля', ' до ': 'рубля'}}
+        rules_dict = {'1': {' к ': 'рублю', 'ниже':'рубля', 
+                            'выше': 'рубля', ' до ': 'рубля'}}
         sent_new = sent
         # Lets take a chance for non-numeric sentences
         if len(re.findall('(\d+)',sent)) != 0:
@@ -219,19 +228,21 @@ import urllib.request
                     for predl in list(rules_dict[lastr].keys()):
                         if predl in sent_new and znak == False:
                             # print('wow',' ',sent_new,' ',predl)
-                            sent_new = sent.replace(sent_new[start:start + finish], rules_dict[lastr][predl])
+                            sent_new = sent.replace(sent_new[start:start + finish], 
+                                                    rules_dict[lastr][predl])
                             znak = True
 
                     if znak == False:
                         # print('yet')
-                        sent_new = sent_new.replace(sent_new[start:start + finish], self.default_dict(lastr))
+                        sent_new = sent_new.replace(sent_new[start:start + finish], 
+                                                    self.default_dict(lastr))
 
 
                 else:
-                    sent_new = sent_new.replace(sent_new[start:start + finish], self.default_dict(lastr))
+                    sent_new = sent_new.replace(sent_new[start:start + finish], 
+                                                self.default_dict(lastr))
 
         return sent_new
-
 
     # Returning func.
     @staticmethod
@@ -242,8 +253,10 @@ import urllib.request
         keyw_closer_curr = '</' + currence[1:]
         keyw_closer_val = '</' + value[1:]
         while keyw_closer_curr in dat:
-            curr = str(dat[dat.find(currence) + len(currence):dat.find(keyw_closer_curr)])
-            vall = float(str(dat[dat.find(value) + len(value):dat.find(keyw_closer_val)])[:5].replace(',', '.'))
+            curr = str(dat[dat.find(currence) + 
+                           len(currence):dat.find(keyw_closer_curr)])
+            vall = float(str(dat[dat.find(value) + 
+                                 len(value):dat.find(keyw_closer_val)])[:5].replace(',', '.'))
             mass[curr] = vall
             dat = dat[dat.find(keyw_closer_val) + len(keyw_closer_val):]
         return mass
