@@ -21,9 +21,9 @@ import urllib.request
             with open(csv_path, "r") as f_obj:
                 reader = csv.reader(f_obj)
                 for row in reader:
-                    if (('курс ' in row[1]) and ('доллар' in row[1])) or 
+                    if (('курс ' in row[1]) and ('доллар' in row[1])) or
                     (('курс ' in row[1]) and ('евро' in row[1])):
-                        data+=' '+row[1]
+                        data += ' ' + row[1]
                         starter_list.append((row[1].split(' '))[0])
 
         # Now, let's try to parse the data from exchange's daily data
@@ -36,8 +36,8 @@ import urllib.request
         self.Currence_dict = Currence_dict
 
         # Manual words list
-        badlist = ['поднял', 'упал', "вырос", "повысил", "понизил", 
-                   "снизился", "уронил", "опустил", "поднялся", 
+        badlist = ['поднял', 'упал', "вырос", "повысил", "понизил",
+                   "снизился", "уронил", "опустил", "поднялся",
                    "превысил", "опустился"]
 
         scn = 0
@@ -48,15 +48,15 @@ import urllib.request
             sentense.append(self.random_choice_starter(self))
             for i in range(10):
 
-                # Let's make the prohibition for program to creating 
+                # Let's make the prohibition for program to creating
                 # new sentences in old ones
                 cac = 0
                 if sentense[-1] != '':
                     rand_word = self.random_choice_word(sentense[-1])
                     # While words from our list occur more then one time
                     # While there are words from startwords -list
-                    while (rand_word in self.news_starter(self)) or 
-                    (len(set(sentense + [rand_word])) - 
+                    while (rand_word in self.news_starter(self)) or
+                    (len(set(sentense + [rand_word])) -
                      len(set(sentense + [rand_word]) - set(badlist)) >= 2):
                         rand_word = self.random_choice_word(sentense[-1])
                         cac += 1
@@ -70,7 +70,7 @@ import urllib.request
                     sentense.append(rand_word)
 
             # If all of limitations passed, we can public the news
-            lean = len(set(sentense + [rand_word])) - 
+            lean = len(set(sentense + [rand_word])) -
             len(set(sentense + [rand_word]) - set(badlist))
             if len(sentense) > 4 and marker == 0 and lean < 2 and lean > 0:
                 solid = self.sent_decomposition(self, ' '.join(sentense))
@@ -80,9 +80,9 @@ import urllib.request
 
 # ____next_section__________________________________
 
-
     # Take ever word and building a wordslist which can staying after them
-    # Reading all data for this, and if finding my word, checking which word was after them
+    # Reading all data for this, and if finding my word, ...
+    # ...checking which word was after them
     # But, if we have dot after sentence, we are stopping
 
     @staticmethod
@@ -104,14 +104,12 @@ import urllib.request
 
         return result
 
-
     # Now let's try to find wrods with capital letter
     @staticmethod
     def news_starter(self):
         words = self.data.replace('\xa0', ' ').split(' ')
         return list(filter(lambda wow: str.isupper((wow + 'n')[0]), words))
     # But doing this by first-words-list
-
 
     # Create massiv generation function
     # We can make our choice with random-choice function
@@ -139,23 +137,23 @@ import urllib.request
     @classmethod
     def random_choice_word(self, word):
         # Let's create a strange-words list
-        strange_list = {'до':0, 'с':0, 'в':0, 'к':0, 'о':0}
-        strange_list['до'] = {'нового': 5, 'старого': 3, 
-                              'полугодового': 3, 'двухлетнего': 2, 
-                              'максимума': 2, '73': 2, 'трехмесячного': 2, 
+        strange_list = {'до': 0, 'с': 0, 'в': 0, 'к': 0, 'о': 0}
+        strange_list['до'] = {'нового': 5, 'старого': 3,
+                              'полугодового': 3, 'двухлетнего': 2,
+                              'максимума': 2, '73': 2, 'трехмесячного': 2,
                               '50': 1, '30': 5}
-        strange_list['с'] = {'нового': 5, 'финансов': 3, 
-                             'полугодового': 3, 'двухлетнего': 2, 
-                             '2008': 2, '73': 2, 'длинных': 2, 
+        strange_list['с'] = {'нового': 5, 'финансов': 3,
+                             'полугодового': 3, 'двухлетнего': 2,
+                             '2008': 2, '73': 2, 'длинных': 2,
                              'трехмесячного': 2, '50': 1, '30': 5}
-        strange_list['в'] = {'докризисный': 4,'отставку': 3, 
-                             'свой': 3, 'помощь': 3, 
-                             'рекордный': 2, '4': 2, 'адекватный': 2, 
+        strange_list['в'] = {'докризисный': 4,'отставку': 3,
+                             'свой': 3, 'помощь': 3,
+                             'рекордный': 2, '4': 2, 'адекватный': 2,
                              '50': 1, '44':3}
-        strange_list['к'] = {'доллару': 4, 'евро': 3, 'рублю': 2, 
-                             'отметке': 2, '71': 1, 
+        strange_list['к'] = {'доллару': 4, 'евро': 3, 'рублю': 2,
+                             'отметке': 2, '71': 1,
                              '50': 1, '44': 2}
-        strange_list['о'] = {'евро': 3, 'ещё': 3, '50': 1, 'почти': 2, 
+        strange_list['о'] = {'евро': 3, 'ещё': 3, '50': 1, 'почти': 2,
                              'более': 1, 'введении': 1}
         sch = 0
         # If our word from normal list, that's all is OK
@@ -171,15 +169,14 @@ import urllib.request
                 sch += decision_mass[sl]
                 decision_mass[sl] = sch
 
-            rand_choice = rand.randint(0,sch)
+            rand_choice = rand.randint(0, sch)
             for slov in decision_mass:
                 if rand_choice <= decision_mass[slov]:
                     return(slov)
                     break
         else:
             return '-1'
-        
-        
+
     # Tails decomposition function
     @staticmethod
     def default_dict(numb):
@@ -194,11 +191,11 @@ import urllib.request
     @staticmethod
     def sent_decomposition(self, sent):
         Currence_dict = self.Currence_dict
-        rules_dict = {'1': {' к ': 'рублю', 'ниже':'рубля', 
+        rules_dict = {'1': {' к ': 'рублю', 'ниже': 'рубля',
                             'выше': 'рубля', ' до ': 'рубля'}}
         sent_new = sent
         # Lets take a chance for non-numeric sentences
-        if len(re.findall('(\d+)',sent)) != 0:
+        if len(re.findall('(\d+)', sent)) != 0:
             # not for years
             if float(re.findall('(\d+)', sent)[0]) < 2000:
                 inserter = ''
@@ -215,8 +212,8 @@ import urllib.request
                 else:
                     lastr = '1'
 
-                znak=False
-                sent_new=sent
+                znak = False
+                sent_new = sent
 
                 start = sent_new.find('рубл')
                 if start == -1:
@@ -232,18 +229,17 @@ import urllib.request
                     for predl in list(rules_dict[lastr].keys()):
                         if predl in sent_new and znak == False:
                             # print('wow',' ',sent_new,' ',predl)
-                            sent_new = sent.replace(sent_new[start:start + finish], 
+                            sent_new = sent.replace(sent_new[start:start + finish],
                                                     rules_dict[lastr][predl])
                             znak = True
 
                     if znak == False:
                         # print('yet')
-                        sent_new = sent_new.replace(sent_new[start:start + finish], 
+                        sent_new = sent_new.replace(sent_new[start:start + finish],
                                                     self.default_dict(lastr))
 
-
                 else:
-                    sent_new = sent_new.replace(sent_new[start:start + finish], 
+                    sent_new = sent_new.replace(sent_new[start:start + finish],
                                                 self.default_dict(lastr))
 
         return sent_new
@@ -257,9 +253,9 @@ import urllib.request
         keyw_closer_curr = '</' + currence[1:]
         keyw_closer_val = '</' + value[1:]
         while keyw_closer_curr in dat:
-            curr = str(dat[dat.find(currence) + 
+            curr = str(dat[dat.find(currence) +
                            len(currence):dat.find(keyw_closer_curr)])
-            vall = float(str(dat[dat.find(value) + 
+            vall = float(str(dat[dat.find(value) +
                                  len(value):dat.find(keyw_closer_val)])[:5].replace(',', '.'))
             mass[curr] = vall
             dat = dat[dat.find(keyw_closer_val) + len(keyw_closer_val):]
