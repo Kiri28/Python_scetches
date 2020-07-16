@@ -51,39 +51,40 @@ import urllib.request
                 if sentense[-1] != '':
                     rand_word = self.random_choice_word(sentense[-1])
                     # While words from our list occur more then one time
-                    # пока появляются только слова из списка слов- начал предложения    
+                    # While there are words from startwords -list   
                     while (rand_word in self.news_starter(self)) or 
                     (len(set(sentense + [rand_word])) - 
                      len(set(sentense + [rand_word]) - set(badlist)) >= 2):
-                        rand_word=self.random_choice_word(sentense[-1])
-                        cac+=1
-                        #если нам кажется что других вариантов не придумать
-                        if cac>100:
+                        rand_word = self.random_choice_word(sentense[-1])
+                        cac += 1
+                        # If we can't find any useful variants
+                        if cac > 100:
                             break
-                    #проверяем, не было ли у нас зацикливания и конца предложения, если было то останавливаем набор текста
-                    if cac>100 or rand_word=='-1':
-                        marker=1
+                    # Checking algo by circularity and finish words
+                    if cac>100 or rand_word == '-1':
+                        marker = 1
                         break
                     sentense.append(rand_word)
 
-            #выводим новость только если соблюдены все ограничения
-            lean=len(set(sentense+[rand_word]))-len(set(sentense+[rand_word])-set(badlist))
-            if len(sentense)>4 and marker==0 and lean<2 and lean>0:
-                solid=self.sent_decomposition(self,' '.join(sentense))
-                if solid!='-1':
+            # If all of limitations passed, we can public the news
+            lean = len(set(sentense + [rand_word])) - len(set(sentense + [rand_word]) - set(badlist))
+            if len(sentense) > 4 and marker == 0 and lean < 2 and lean > 0:
+                solid = self.sent_decomposition(self, ' '.join(sentense))
+                if solid != '-1':
                     print(solid)
-                    scn+=1
-        
-#_______________________________________________________
-        
-        
+                    scn += 1
+
+# ____next_section__________________________________
+
+
     # беру каждое слово и делаю для него список слов, которые шли после
     # для этого читаю всю data, и если нахожу искомое слово, смотрю что шло после него
     # но при этом, если в конце этого слова стоит точка, то я ничего не добавляю
-    @staticmethod
-    def sm(self,trigger):
 
-        result=[]
+    @staticmethod
+    def sm(self, trigger):
+
+        result = []
         words_list=self.data.replace('\xa0',' ').split(' ')
         trig=False
         for word in words_list:
@@ -97,8 +98,8 @@ import urllib.request
                 continue
 
         return result
-    
-    
+
+
     # Теперь будем находить слово с большой буквы и пытаться начать предложение с него
     @staticmethod
     def news_starter(self):
