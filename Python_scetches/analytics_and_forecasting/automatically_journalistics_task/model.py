@@ -8,34 +8,35 @@ import urllib.request
 
 
 # Let's create our class
-class Reporter:
-    
+
     @classmethod
     def __init__(self):
-        # читаем заголовок статьи и если там есть слово "доллар" и "курс" или "доллар" и "евро"
-        # то мы заносим новоть в наш список
-        starter_list=[] #список слов, с которых можно начинать новость
-        data=''
+        # Read the news, and if it has such words as "доллар" and "курс" or "доллар" and "евро"..
+        # ..that's we are including them in our list
+        starter_list = [] # words list, that can start a new item.
+        data = ''
         if __name__ == "__main__":
             csv_path = "lenta-ru-news.csv"
             with open(csv_path, "r") as f_obj:
                 reader = csv.reader(f_obj)
                 for row in reader:
-                    if (('курс ' in row[1]) and ('доллар' in row[1])) or (('курс ' in row[1]) and ('евро' in row[1])):
+                    if (('курс ' in row[1]) and ('доллар' in row[1])) or 
+                    (('курс ' in row[1]) and ('евро' in row[1])):
                         data+=' '+row[1]
                         starter_list.append((row[1].split(' '))[0])
-        
-        #теперь попробуем спарсить данные с дневных данных с биржи
+
+        # Now, let's try to parse the data from exchange's daily data
         link = urllib.request.urlopen('http://www.cbr.ru/scripts/XML_daily.asp')
-        l=str(link.readlines()[0])
-        self.data=data
-        self.l=l
-        self.starter_list=starter_list
-        Currence_dict=self.currency_finder(self)
-        self.Currence_dict=Currence_dict
+        l = str(link.readlines()[0])
+        self.data = data
+        self.l = l
+        self.starter_list = starter_list
+        Currence_dict = self.currency_finder(self)
+        self.Currence_dict = Currence_dict
         
-        # будем составлять список слов
-        badlist=['поднял','упал',"вырос","повысил","понизил","снизился","уронил","опустил","поднялся","превысил","опустился"]
+        # Manual words list
+        badlist = ['поднял', 'упал', "вырос", "повысил", "понизил", 
+                   "снизился", "уронил", "опустил", "поднялся", "превысил", "опустился"]
 
         scn=0
         while scn<7:
