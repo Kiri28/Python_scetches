@@ -11,7 +11,8 @@ import urllib.request
 
     @classmethod
     def __init__(self):
-        # Read the news, and if it has such words as "доллар" and "курс" or "доллар" and "евро"..
+        # Read the news, and if it has such words as 
+        # "доллар" and "курс" or "доллар" and "евро"..
         # ..that's we are including them in our list
         starter_list = [] # words list, that can start a new item.
         data = ''
@@ -36,7 +37,8 @@ import urllib.request
 
         # Manual words list
         badlist = ['поднял', 'упал', "вырос", "повысил", "понизил", 
-                   "снизился", "уронил", "опустил", "поднялся", "превысил", "опустился"]
+                   "снизился", "уронил", "опустил", "поднялся", 
+                   "превысил", "опустился"]
 
         scn = 0
         while scn < 7:
@@ -46,12 +48,13 @@ import urllib.request
             sentense.append(self.random_choice_starter(self))
             for i in range(10):
 
-                # Let's make the prohibition for program to creating new sentences in old ones
+                # Let's make the prohibition for program to creating 
+                # new sentences in old ones
                 cac = 0
                 if sentense[-1] != '':
                     rand_word = self.random_choice_word(sentense[-1])
                     # While words from our list occur more then one time
-                    # While there are words from startwords -list   
+                    # While there are words from startwords -list
                     while (rand_word in self.news_starter(self)) or 
                     (len(set(sentense + [rand_word])) - 
                      len(set(sentense + [rand_word]) - set(badlist)) >= 2):
@@ -61,13 +64,14 @@ import urllib.request
                         if cac > 100:
                             break
                     # Checking algo by circularity and finish words
-                    if cac>100 or rand_word == '-1':
+                    if cac > 100 or rand_word == '-1':
                         marker = 1
                         break
                     sentense.append(rand_word)
 
             # If all of limitations passed, we can public the news
-            lean = len(set(sentense + [rand_word])) - len(set(sentense + [rand_word]) - set(badlist))
+            lean = len(set(sentense + [rand_word])) - 
+            len(set(sentense + [rand_word]) - set(badlist))
             if len(sentense) > 4 and marker == 0 and lean < 2 and lean > 0:
                 solid = self.sent_decomposition(self, ' '.join(sentense))
                 if solid != '-1':
