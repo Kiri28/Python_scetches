@@ -126,12 +126,12 @@ import urllib.request
         # If we want to add the "курс" word...
         decision_mass['курс'] = sch
 
-        rand_choice=rand.randint(0,sch)
+        rand_choice = rand.randint(0,sch)
         for slov in decision_mass:
-            if rand_choice<=decision_mass[slov]:
+            if rand_choice <= decision_mass[slov]:
                 return(slov)
                 break
-    
+
     @classmethod
     def random_choice_word(self,word):
         # создадим словарь слов, которые кажутся очень странными в своём поведении и будем делать для них отедельное решение
